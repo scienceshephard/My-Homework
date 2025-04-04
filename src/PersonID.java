@@ -15,10 +15,8 @@ public class PersonID {
     }
 
     public String setPersonID(final String personID){
-        if (personID == null || !checkPersonIDNumber(personID)) {
+        if (personID == null || !checkPersonIDNumber(personID))
             return ConstantValues.INVALID_BIRTHDAY;
-        }
-    
 
         String date = "";
         try{

@@ -23,7 +23,7 @@ public class Course {
 
     public Course(String name, final int code, Character courseBase, final int type, final int period, final double credits, boolean numericGrade){
 
-//        this();
+        this();
         setName(name);
         setCourseCode(code, courseBase);
         setCourseType(type);
@@ -81,7 +81,9 @@ public class Course {
     }
 
     public void setPeriod(final int period) {
-        this.period = period;
+        if (period >= ConstantValues.MIN_PERIOD)
+            if (period <= ConstantValues.MAX_PERIOD)
+                this.period = period;
     }
 
     public double getCredits() {

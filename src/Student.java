@@ -11,7 +11,7 @@ public class Student {
     private int graduationYear;
     private int degreeCount = 3;
     private Degree[] degrees = new Degree[3];
-    private String birthDate = ConstantValues.NO_BIRTHDATE;
+    private String birthDate = ConstantValues.NO_BIRTHDATE;//by default not available
 
     Student(){
         this.id = getRandomId();
@@ -107,9 +107,10 @@ public class Student {
     }
 
     public void printDegrees(){
-        for(Degree degree: degrees)
-            if(degree != null)
-                System.out.println(degree);
+
+        for(int i = 0; i < degreeCount; i++)
+            if(degrees[i] != null)
+                System.out.println(degrees[i].toString());
     }
 
     public void setTitleOfThesis(final int i, String title){
@@ -128,10 +129,11 @@ public class Student {
          if (personId == null) {
             return "No change";
         }
+         PersonID pId= new PersonID();
         
-        String result = new PersonID().setPersonID(personId);
+        String result = pId.setPersonID(personId);
         if (result.equals("Ok")) {
-            this.birthDate = new PersonID().getBirthDate();
+            this.birthDate = pId.getBirthDate();
             return birthDate;
         }
         return "No change";
@@ -165,31 +167,50 @@ public class Student {
 
     @Override
     public String toString() {
-        String result = String.format("Student id: %d\n\t\tFirst name: %s, Last name: %s\n\t\tDate of birth: \"%s\"\n\t\t", id, firstName, lastName, birthDate);
-        if(hasGraduated())
-            result = result + String.format("Status: The student has graduated in %d\n\t\t", graduationYear);
-        else
-            result = result + "Status: The student has not graduated, yet\n\t\t";
-        result = result + String.format("Start year: %d (studies have lasted for %d years)\n\t\t", startYear, getStudyYears());
-        
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Student id: ").append(id).append("\n");
+        stringBuilder.append("\tFirst name: ").append(firstName)
+                .append(", Last name: ").append(lastName).append("\n");
+        stringBuilder.append("\tDate of birth: \"").append(birthDate).append("\"\n");
+
+        if (hasGraduated()) {
+            stringBuilder.append("\tStatus: The student has graduated in ").append(graduationYear).append("\n");
+        } else {
+            stringBuilder.append("\tStatus: The student has not graduated, yet\n");
+        }
+
+        stringBuilder.append("\tStart year: ").append(startYear)
+                .append(" (studies have lasted for ").append(getStudyYears()).append(" years)\n");
+
         double totalCredits = degrees[0].getCredits() + degrees[1].getCredits();
-        result = result + String.format("Total credits: %.1f\n\t\t", totalCredits);
-        
-        double bachelorCredits= degrees[0].getCredits();
-        if(bachelorCredits >= ConstantValues.BACHELOR_CREDITS)
-            result = result + String.format("Bachelor credits: %.1f\n\t\t\t\tTotal bachelor credits completed (%.1f/180.0)\n\t\t\t\t", bachelorCredits, bachelorCredits);
-        else
-            result= result + String.format("Bachelor credits: %.1f\n\t\t\t\tMissing bachelor credits %.1f (%.1f/180.0)\n", bachelorCredits,  ConstantValues.BACHELOR_CREDITS - bachelorCredits, bachelorCredits);
-        
-        result= result+ String.format("Title of BSc Thesis: \"%s\"\n\t\t", degrees[0].getTitleOfThesis());
+        stringBuilder.append("\tTotal credits: ").append(String.format("%.1f", totalCredits)).append("\n");
 
+        // Bachelor credits info
+        double bachelorCredits = degrees[0].getCredits();
+        stringBuilder.append("\tBachelor credits: ").append(String.format("%.1f", bachelorCredits)).append("\n");
+        if (bachelorCredits >= ConstantValues.BACHELOR_CREDITS) {
+            stringBuilder.append("\t\tTotal bachelor credits completed (")
+                    .append(String.format("%.1f", bachelorCredits)).append("/180.0)\n");
+        } else {
+            stringBuilder.append("\t\tMissing bachelor credits ")
+                    .append(String.format("%.1f", ConstantValues.BACHELOR_CREDITS - bachelorCredits))
+                    .append(" (").append(String.format("%.1f", bachelorCredits)).append("/180.0)\n");
+        }
+        stringBuilder.append("\t\tTitle of BSc Thesis: \"").append(degrees[0].getTitleOfThesis()).append("\"\n");
+
+        // Master credits info
         double masterCredits = degrees[1].getCredits();
-        if (masterCredits >= ConstantValues.MASTER_CREDITS)
-            result = result + String.format("Master credits: %.1f\n\t\t\t\tTotal master's credits completed (%.1f/120.0)\n", masterCredits, masterCredits);
-        else
-            result = result + String.format("Master credits: %.1f\n\t\t\t\tMissing master's credits %.1f (%.1f/120.0)\n", masterCredits, ConstantValues.MASTER_CREDITS - masterCredits, masterCredits);
-            result = result + String.format("\t\t\t\tTitle of MSc Thesis: \"%s\"\n", degrees[1].getTitleOfThesis());
-        return result;
-    }
+        stringBuilder.append("\tMaster credits: ").append(String.format("%.1f", masterCredits)).append("\n");
+        if (masterCredits >= ConstantValues.MASTER_CREDITS) {
+            stringBuilder.append("\t\tTotal master's credits completed (")
+                    .append(String.format("%.1f", masterCredits)).append("/120.0)\n");
+        } else {
+            stringBuilder.append("\t\tMissing master's credits ")
+                    .append(String.format("%.1f", ConstantValues.MASTER_CREDITS - masterCredits))
+                    .append(" (").append(String.format("%.1f", masterCredits)).append("/120.0)\n");
+        }
+        stringBuilder.append("\t\tTitle of MSc Thesis: \"").append(degrees[1].getTitleOfThesis()).append("\"\n");
 
+        return stringBuilder.toString();
+    }
 }

@@ -48,7 +48,7 @@ public class Degree {
             this.titleOfThesis = titleOfThesis;
     }
 
-    public double getCreditsByBase(Character base){
+    public double getCreditstringBuilderyBase(Character base){
         double total = 0.0;
 
         int i=0;
@@ -62,7 +62,7 @@ public class Degree {
         return total;
     }
 
-    public double getCreditsByType(final int courseType){
+    public double getCreditstringBuilderyType(final int courseType){
         double total = 0.0;
 
         int i=0;
@@ -99,14 +99,18 @@ public class Degree {
         }
     }
     @Override
-    public String toString(){
-        
-        String result= String.format("Degree [Title: \"%s\" (courses: %d)\n \t\t Thesis title: \"%s\"\n", degreeTitle, count, titleOfThesis);
-        for (int i = 0; i < count; i++) {
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(String.format("Degree [Title: \"%s\" (courses: %d)\n",
+                degreeTitle, count));
+        stringBuilder.append(String.format("\t\tThesis title: \"%s\"\n", titleOfThesis));
+        int i = 0;
+        while ( i < count) {
             if (myCourses[i] != null) {
-                result = result + String.format("\t\t %d. %s\n", i + 1, myCourses[i]);
+                stringBuilder.append(String.format("\t\t %d. %s\n", i + 1, myCourses[i].toString()));
             }
+            i++;
         }
-        return result;
+        return stringBuilder.toString();
     }
 }
