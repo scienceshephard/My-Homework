@@ -23,7 +23,7 @@ public class Course {
 
     public Course(String name, final int code, Character courseBase, final int type, final int period, final double credits, boolean numericGrade){
 
-        this();
+//        this();
         setName(name);
         setCourseCode(code, courseBase);
         setCourseType(type);
@@ -80,7 +80,7 @@ public class Course {
         return period;
     }
 
-    public void setPeriod(int period) {
+    public void setPeriod(final int period) {
         this.period = period;
     }
 
@@ -88,7 +88,7 @@ public class Course {
         return credits;
     }
 
-    public void setCredits(double credits) {
+    private void setCredits(final double credits) {
         this.credits = credits;
     }
     public boolean isNumericGrade() {
